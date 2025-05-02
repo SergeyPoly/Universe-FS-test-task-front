@@ -3,7 +3,9 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axiosInstance from '../api/axiosInstance';
 import { TextField, Button, Stack } from '@mui/material';
-import { useAuth } from '../contexts/authContext';
+import { useAuth } from '../providers/AuthProvider';
+import { getErrorMessage } from '../utils/getErrorMessage';
+import { useNotification } from '../providers/NotificationProvider';
 
 interface Props {
   loginMode: boolean;
@@ -18,14 +20,15 @@ const AuthSchema = Yup.object().shape({
 
 const AuthForm: FC<Props> = ({ loginMode }) => {
   const { login } = useAuth();
+  const { showNotification } = useNotification();
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
       const url = loginMode ? '/auth/login' : '/auth/register';
       const response = await axiosInstance.post(url, values);
-      login(response.data.token);
-    } catch (error) {
-      console.error('Error:', error);
+      login(response.data.access_token);
+    } catch (err) {
+      showNotification(getErrorMessage(err), 'error');
     }
   };
 

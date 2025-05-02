@@ -6,11 +6,11 @@ import {
   Link,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/authContext';
-import AuthForm from "../components/AuthForm";
+import { useAuth } from '../providers/AuthProvider';
+import AuthForm from '../components/AuthForm';
 
 const AuthPage = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const AuthPage = () => {
         <Box mt={2}>
           <Link component="button" onClick={toggleMode}>
             {loginMode
-              ? "Don't have an account? Register"
+              ? 'Don\'t have an account? Register'
               : 'Already have an account? Log in'}
           </Link>
         </Box>
